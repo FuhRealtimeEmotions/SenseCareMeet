@@ -18,10 +18,12 @@ backupTurnServers:
 
 
 redisOptions:
-  host: "192.168.39.127"                                                                                                                                                                  
+  #host: "192.168.39.127"  
+  host: "redis"                                                                                                                                                                
   port: "30030"            
   password: "_REDIS_PASSWORD_"
-  url: "redis://192.168.39.127:30030/1"
+  #url: "redis://192.168.39.127:30030/1"
+  url: "redis://redis:30030/1"
 
 rabbitmqOptions:
   url: "amqp://guest:guest@192.168.39.127:32690"                                                                                                                                                                 

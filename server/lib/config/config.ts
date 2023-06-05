@@ -168,7 +168,19 @@ const configSchema = convict({
 			doc     : 'Redis server password.',
 			format  : String,
 			default : ''
-		}
+		},
+		url: {
+		doc     : 'Redis server password.',
+		format  : String,
+		default : ''
+	}
+	},
+	rabbitmqOptions : {
+		url: {
+			doc     : 'RabbitMQ server URL.',
+			format  : String,
+			default : ''
+		},
 	},
 	cookieSecret : {
 		doc     : 'Session cookie secret.',
