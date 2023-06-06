@@ -1,12 +1,54 @@
-redisOptions:
-  host: redis
-  port: 6379
+### MEINS
+listeningPort: 8443
+listeningHost: 0.0.0.0
 
-listeningPort: 3443
-listeningRedirectPort: 0
-httpOnly: false
-trustProxy: ''
+fileTracker: "wss://tracker.openwebtorrent.com"
+
+tls:
+  cert: ./certs/edumeet-demo-cert.pem
+  key:  ./certs/edumeet-demo-key.pem
+
+# turnAPIURI: "https://host.domain.tld/turn"
+# turnAPIKey: "Your API key"
+
+backupTurnServers:
+- urls:
+  - "stun:127.0.0.1:3478"
+  username: "test"
+  credential: "test123"
+
+redisOptions:
+  host: "127.0.0.1"
+  port: "6379"
+  password: "_REDIS_PASSWORD_"
+  #url: "redis://127.0.0.1:30030/1"
 
 prometheus:
+  enabled: false
+  deidentify: true
+  numeric: true
+  listen: host.domain.tld
+
+mediasoup:
+  webRtcTransport:
+    listenIps:
+    - ip: "0.0.0.0"
+  plainRtpTransport:
+    listenIp:
+    - ip: "0.0.0.0"
+    rtcpMux: true
+    comedia: false
+
+rabbitmqOptions:
+  url: "amqp://guest:guest@127.0.0.1:32690"
+
+bentoML:
+  enabled: false
+  URI: "http://127.0.0.1:3000/predict_async"
+
+celery:
   enabled: true
-  listen: 0.0.0.0
+  
+emotion:
+  targetFps: 10
+  minFps: 5
