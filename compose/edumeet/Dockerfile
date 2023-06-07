@@ -9,10 +9,6 @@ RUN npm install -g nodemon && \
 
 RUN touch /.yarnrc && mkdir -p /.yarn /.cache/yarn && chmod -R 775 /.yarn /.yarnrc /.cache
 
-#CMD concurrently --names "server,app" \
-#    "cd app && yarn && yarn build && yarn start" \
-#    "cd server && yarn && yarn start"
-
 CMD concurrently --names "server,app" \
     "cd app && yarn && yarn build && yarn start" \
     "cd server && yarn && yarn start"

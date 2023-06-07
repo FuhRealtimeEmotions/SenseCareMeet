@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edumeet-deployment
+  labels:
+    app: edumeet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edumeet
+  template:
+    metadata:
+      labels:
+        app: edumeet
+    spec:
+      containers:
+      - name: edumeet
+        image: edumeet:latest
+        ports:
+        - containerPort: 8443
+        
