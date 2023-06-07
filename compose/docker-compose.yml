@@ -38,6 +38,38 @@ services:
     network_mode: "host"
     ports:
     - 6379:6379
+
+  pikaworker:
+    image: dennismaier/pikaworker:latest
+    container_name: edumeet_pikaworker
+    restart: unless-stopped
+    mem_limit: 4096m
+    mem_reservation: 4096m
+    cpus: 1
+    user: nobody
+    network_mode: "host"
+    extra_hosts:
+      - "redis: 127.0.0.1"
+      - "edumeet: 127.0.0.1"
+    environment:
+      - result_url=http://edumeet:8010
+    depends_on:
+    - edumeet
+
+  rabbitMQ:
+    image: rabbitmq:3-management
+    container_name: edumeet_rabbitmq
+    restart: unless-stopped
+    ports:
+    - 15672:15672
+    - 5672:5672
+    - 5671:5671
+    - 25672:25672
+    - 4369:4369
+    environment:
+    - RABBITMQ_DEFAULT_USER=guest
+    - RABBITMQ_DEFAULT_PASS=guest
+
 #    networks:
 #      edumeet:
 #        ipv4_address: 172.22.0.2
