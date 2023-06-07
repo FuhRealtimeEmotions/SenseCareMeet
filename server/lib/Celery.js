@@ -2,6 +2,8 @@ const { config } = require("./config/config");
 import Logger from "./logger/Logger";
 const logger = new Logger("Celery");
 
+logger.error("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+logger.error(config);
 const CELERY_BROKER_URL = config.rabbitmqOptions.url;
 //const CELERY_BROKER_URL = "amqp://user:mypass@10.243.64.9:31001";
 //const CELERY_BROKER_URL = "amqp://user:mypass@rabbitmq:5672";

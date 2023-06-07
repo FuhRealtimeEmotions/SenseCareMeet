@@ -50,6 +50,9 @@ bentoML:
   URI: "http://127.0.0.1:3000/predict_async"
 
 celery:
+  enabled: false
+
+Pika:
   enabled: true
   
 emotion:

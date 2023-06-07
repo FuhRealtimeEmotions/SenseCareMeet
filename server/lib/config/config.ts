@@ -288,6 +288,15 @@ const configSchema = convict({
 			default : false
 		},
 	},
+	// Celery Settings
+	pika : 
+		{
+			enabled : {
+				doc     : 'Whether to enable sending images to Celery for emotion analysis .',
+				format  : 'Boolean',
+				default : false
+			},
+		},
 	// Emotion setting
 	emotion : 
 	{

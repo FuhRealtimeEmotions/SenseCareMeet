@@ -300,6 +300,7 @@ class Room extends EventEmitter
 
 		this._bentoml = new BentoML(roomId);
 		this._celery = new Celery(roomId);
+		this._pika = new Pika(roomId);
 	}
 
 	isLocked()
@@ -798,6 +799,8 @@ class Room extends EventEmitter
 				this._bentoml.analyze(peer, face);
 			if (config.celery.enabled)
 				this._celery.analyze(peer, face);
+			if (config.pika.enabled)
+				this._pika.analyze(peer, face);
 				
 
 		});

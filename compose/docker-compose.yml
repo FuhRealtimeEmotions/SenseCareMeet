@@ -28,6 +28,7 @@ services:
     network_mode: "host"
     extra_hosts:
       redis: 127.0.0.1
+      rabbitmq: 127.0.0.1
     depends_on:
     - redis
 
