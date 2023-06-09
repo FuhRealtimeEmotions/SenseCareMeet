@@ -9,6 +9,8 @@ RUN npm install -g nodemon && \
 
 RUN touch /.yarnrc && mkdir -p /.yarn /.cache/yarn && chmod -R 775 /.yarn /.yarnrc /.cache
 
+COPY dist /edumeet
+
 CMD concurrently --names "server,app" \
-    "cd app && yarn && yarn build && yarn start" \
-    "cd server && yarn && yarn start"
+    "node server.js" \
+    "HTTPS=true PORT=4443 react-scripts start"

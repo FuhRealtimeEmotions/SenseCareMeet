@@ -288,7 +288,7 @@ const configSchema = convict({
 			default : false
 		},
 	},
-	// Celery Settings
+	// Pika Settings
 	pika : 
 		{
 			enabled : {

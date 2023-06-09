@@ -15,20 +15,23 @@ services:
 #    command: bash -c "while true; do echo hello; sleep 2; done"
 
   edumeet:    
-    build: ./edumeet
+    build: .
     container_name: edumeet
     restart: unless-stopped
     user: "${CURRENT_USER}"
     volumes:
-    - ${PWD}/..:/edumeet
+    #- ${PWD}/..:/edumeet
     - ${PWD}/config/edumeet-server-config.js:/edumeet/server/config/config.js:ro
     - ${PWD}/config/edumeet-server-config.yaml:/edumeet/server/config/config.yaml:ro
     - ${PWD}/config/edumeet-app-config.js:/edumeet/app/public/config/config.js:ro
     #- ${PWD}/../app/public/config/config.example.js:/edumeet/app/public/config/config.js:ro
-    network_mode: "host"
+    #network_mode: "host"
     extra_hosts:
-      redis: 127.0.0.1
-      rabbitmq: 127.0.0.1
+      redis: 192.168.178.20
+      rabbitmq: 192.168.178.20
+    ports:
+    - 8443:8443
+    - 8010:8010
     depends_on:
     - redis
 
@@ -36,41 +39,41 @@ services:
     image: redis
     container_name: edumeet_redis
     restart: unless-stopped
-    network_mode: "host"
+    #network_mode: "host"
     ports:
     - 6379:6379
 
-  pikaworker:
-    image: dennismaier/pikaworker:latest
-    container_name: edumeet_pikaworker
-    restart: unless-stopped
-    mem_limit: 4096m
-    mem_reservation: 4096m
-    cpus: 1
-    user: nobody
-    network_mode: "host"
-    extra_hosts:
-      - "redis: 127.0.0.1"
-      - "edumeet: 127.0.0.1"
-    environment:
-      - result_url=http://edumeet:8010
-    depends_on:
-    - edumeet
-
-  rabbitMQ:
-    image: rabbitmq:3-management
-    container_name: edumeet_rabbitmq
-    restart: unless-stopped
-    ports:
-    - 15672:15672
-    - 5672:5672
-    - 5671:5671
-    - 25672:25672
-    - 4369:4369
-    environment:
-    - RABBITMQ_DEFAULT_USER=guest
-    - RABBITMQ_DEFAULT_PASS=guest
-
+#  pikaworker:
+#    image: dennismaier/pikaworker:latest
+#    container_name: edumeet_pikaworker
+#    restart: unless-stopped
+#    mem_limit: 4096m
+#    mem_reservation: 4096m
+#    #cpus: 1
+#    user: nobody
+#    #network_mode: "host"
+#    extra_hosts:
+#      - "redis: 127.0.0.1"
+#      - "edumeet: 127.0.0.1"
+#    environment:
+#      - result_url=http://edumeet:8010
+#    depends_on:
+#    - edumeet
+#
+#  rabbitMQ:
+#    image: rabbitmq:3-management
+#    container_name: edumeet_rabbitmq
+#    restart: unless-stopped
+#    ports:
+#    - 15672:15672
+#    - 5672:5672
+#    - 5671:5671
+#    - 25672:25672
+#    - 4369:4369
+#    environment:
+#    - RABBITMQ_DEFAULT_USER=guest
+#    - RABBITMQ_DEFAULT_PASS=guest
+#
 #    networks:
 #      edumeet:
 #        ipv4_address: 172.22.0.2

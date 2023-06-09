@@ -2,6 +2,7 @@ node_modules/
 
 /app/build/
 /app/public/images/logo.*
+/app/dist/
 !/app/public/images/logo.edumeet.svg
 !/server/config/config.example.*
 !/server/config/README.md

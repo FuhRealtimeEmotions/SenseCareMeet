@@ -52,7 +52,7 @@ bentoML:
 celery:
   enabled: false
 
-Pika:
+pika:
   enabled: true
   
 emotion:

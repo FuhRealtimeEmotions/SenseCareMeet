@@ -18,7 +18,7 @@ backupTurnServers:
   credential: "test123"
 
 redisOptions:
-  host: "127.0.0.1"
+  host: "192.168.178.20"
   port: "6379"
   password: "_REDIS_PASSWORD_"
   #url: "redis://127.0.0.1:30030/1"
