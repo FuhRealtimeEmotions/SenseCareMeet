@@ -12,6 +12,8 @@ const FFmpeg = require('./ffmpeg');
 
 import BentoML from './BentoML';
 import Celery from './Celery';
+import Pika from './Pika';
+
 const {
 	getPort,
 	releasePort
