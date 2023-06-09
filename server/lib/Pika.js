@@ -16,37 +16,9 @@ class Pika {
   constructor(roomId) {
     this._roomId = roomId;
     connectQueue();
-
-  }
-}
-
-//AMQP
-async function connectQueue() {   
-    try {
-        logger.info("Connecting to RabbitMQ");
-        connection = await amqp.connect("amqp://guest:guest@rabbitmq:5672");
-        channel    = await connection.createChannel()
-        var common_options = {durable: false, noAck: true, arguments: { "x-message-ttl":2000 }};
-        channel.assertQueue('emotionrecognition', common_options);
-        
-    } catch (error) {
-        logger.log(error)
-    }
-}
-
-  function makeid(length) {
-    let result = "";
-    var characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    console.log("return msgid:", result);
-    return result;
   }
 
-  function analyze(peer, { buffer, relativeBox }) {
+  analyze(peer, { buffer, relativeBox }) {
     let b64_image = buffer.toString('base64');
     const preAnalysisTimestamp = Date.now();
     //const formData = new FormData();
@@ -68,16 +40,42 @@ async function connectQueue() {
         relativeBox: [],
         backend: 3,
       };
-      jsondata = JSON.stringify(filedata);
+      let jsondata = JSON.stringify(filedata);
       //console.log("jsondata: " + jsondata);
       sendDataPika(jsondata);
       logger.debug("sent to pika backend")
     
     } catch (e) {
-      logger.error("Error in celery", e);
+      logger.error("Error in pika", e);
     }
   }
 
+  makeid(length) {
+    let result = "";
+    var characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    console.log("return msgid:", result);
+    return result;
+  }
+  //AMQP
 
+} 
+
+async function connectQueue() {   
+  try {
+      logger.info("Connecting to RabbitMQ");
+      connection = await amqp.connect("amqp://guest:guest@rabbitmq:5672");
+      channel    = await connection.createChannel()
+      var common_options = {durable: false, noAck: true, arguments: { "x-message-ttl":2000 }};
+      channel.assertQueue('emotionrecognition', common_options);
+      
+  } catch (error) {
+      logger.log(error)
+  }
+}
 
 export default Pika;

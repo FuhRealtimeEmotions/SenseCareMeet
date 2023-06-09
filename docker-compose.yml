@@ -40,6 +40,8 @@ services:
     #cpus: 1
     user: nobody
     #network_mode: "host"
+    ports:
+    - 8093:8093
     extra_hosts:
       - "redis: 192.168.178.20"
       - "edumeet: 192.168.178.20"
@@ -56,6 +58,7 @@ services:
     restart: unless-stopped
     ports:
     - 15672:15672
+    - 32690:32690
     - 5672:5672
     - 5671:5671
     - 25672:25672
