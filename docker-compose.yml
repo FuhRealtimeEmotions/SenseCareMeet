@@ -14,9 +14,6 @@ services:
     #- ${PWD}/config/edumeet-app-config.js:/edumeet/app/public/config/config.js:ro
     #- ${PWD}/../app/public/config/config.example.js:/edumeet/app/public/config/config.js:ro
     #network_mode: "host"
-    #   extra_hosts:
-    #  redis: 127.0.0.1
-    #  rabbitmq: 127.0.0.1
     ports:
     - 8443:8443
     - 8010:8010
@@ -43,10 +40,6 @@ services:
     #network_mode: "host"
     ports:
     - 8093:8093
-      #    extra_hosts:
-      #- "redis: 127.0.0.1"
-      #- "edumeet: 127.0.0.1"
-      #- "rabbitmq: 127.0.0.1"
     environment:
       - result_url=http://edumeet:8010
     depends_on:
@@ -72,21 +65,27 @@ services:
 #      edumeet:
 #        ipv4_address: 172.22.0.2
 
-#  coturn:
-#    image: coturn/coturn
-#    container_name: edumeet_coturn
-#    restart: unless-stopped
-#    ports:
-#    - 3478:3478
-#    - 3478:3478/udp
-#    - 5349:5349
-#    - 5349:5349/udp
-#    - 49160-49200:49160-49200/udp
-#    command:
-#    - --min-port=49160
-#    - --max-port=49200    
-#    depends_on:
-#    - edumeet
+  coturn:
+    image: coturn/coturn
+    container_name: edumeet_coturn
+    restart: unless-stopped
+    ports:
+    - 3478:3478
+    - 3478:3478/udp
+    - 5349:5349
+    - 5349:5349/udp
+    - 49160-49200:49160-49200/udp
+    command:
+    - --min-port=49160
+    - --max-port=49200
+    - --log-file=stdout
+    - --lt-cred-mech
+    - --verbose
+    - --no-tlsv1 
+    - --no-tlsv1_1
+    - --realm=my
+    - --listening-ip=0.0.0.0
+    - --user=test:test123    
 
 #  nginx:
 #    image: nginx

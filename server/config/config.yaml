@@ -12,7 +12,8 @@ tls:
 
 backupTurnServers:
 - urls:
-  - "stun:127.0.0.1:3478"
+  - "stun:116.202.137.233:3478"
+#  - "stun:116.202.137.233:3478?transport=tcp"
   username: "test"
   credential: "test123"
 
@@ -36,11 +37,11 @@ mediasoup:
   webRtcTransport:
     listenIps:
     - ip: "0.0.0.0"
-#      announcedIp: "116.202.137.233"
+      announcedIp: "116.202.137.233"
   plainRtpTransport:
     listenIp:
       ip: "0.0.0.0"
-#      announcedIp: "116.202.137.233"
+      announcedIp: "116.202.137.233"
     rtcpMux: true
     comedia: false
 

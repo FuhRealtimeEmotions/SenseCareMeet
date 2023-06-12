@@ -55,9 +55,4 @@ InstallRabbitMQManagementDocker:
 	docker run -d --hostname my-rabbit --name rabbitmq -p 15672:15672 -p 5672:5672 rabbitmq:3-management
 
 PrepareDocker:	
-	@cd app && yarn && yarn build 
-	@cd server && yarn && yarn build
-	@cp app/package.json server/dist/
-	@cp -r app/node_modules server/dist/ && cp -r server/node_modules server/dist/
-	@cp -r server/dist compose/
-	@cd compose && docker compose build --no-cache
+	@docker compose build --no-cache
