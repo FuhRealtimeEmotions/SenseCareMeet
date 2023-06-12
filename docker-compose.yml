@@ -14,14 +14,15 @@ services:
     #- ${PWD}/config/edumeet-app-config.js:/edumeet/app/public/config/config.js:ro
     #- ${PWD}/../app/public/config/config.example.js:/edumeet/app/public/config/config.js:ro
     #network_mode: "host"
-    extra_hosts:
-      redis: 192.168.178.20
-      rabbitmq: 192.168.178.20
+    #   extra_hosts:
+    #  redis: 127.0.0.1
+    #  rabbitmq: 127.0.0.1
     ports:
     - 8443:8443
     - 8010:8010
     depends_on:
     - redis
+    - rabbitMQ
 
   redis:
     image: redis
@@ -42,10 +43,10 @@ services:
     #network_mode: "host"
     ports:
     - 8093:8093
-    extra_hosts:
-      - "redis: 192.168.178.20"
-      - "edumeet: 192.168.178.20"
-      - "rabbitmq: 192.168.178.20"
+      #    extra_hosts:
+      #- "redis: 127.0.0.1"
+      #- "edumeet: 127.0.0.1"
+      #- "rabbitmq: 127.0.0.1"
     environment:
       - result_url=http://edumeet:8010
     depends_on:
