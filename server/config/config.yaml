@@ -12,20 +12,20 @@ tls:
 
 backupTurnServers:
 - urls:
-  - "stun:116.202.137.233:3478"
+  - "stun:192.168.178.39:3478"
 #  - "stun:116.202.137.233:3478?transport=tcp"
   username: "test"
   credential: "test123"
 
 
 redisOptions:
-  host: redis
+  host: 127.0.0.1
   port: "6379"            
   password: "_REDIS_PASSWORD_"
-  url: "redis://redis:6379/1"
+  url: "redis://127.0.0.1:6379/1"
 
 rabbitmqOptions:
-  url: "amqp://guest:guest@rabbitmq:32690"
+  url: "amqp://guest:guest@127.0.0.1:32690"
    
 prometheus:
   enabled: false
@@ -37,11 +37,11 @@ mediasoup:
   webRtcTransport:
     listenIps:
     - ip: "0.0.0.0"
-      announcedIp: "116.202.137.233"
+      announcedIp: "192.168.178.39"
   plainRtpTransport:
     listenIp:
       ip: "0.0.0.0"
-      announcedIp: "116.202.137.233"
+      announcedIp: "192.168.178.39"
     rtcpMux: true
     comedia: false
 
