@@ -25,22 +25,20 @@ StartIBM:
 
 StartLocally:
 #	@cp server/config/config_local.yaml server/config/config.yaml
+	docker compose up --build
 	@cd app && yarn build
 	@cd server && yarn build
 	@cd server && DEBUG=${DEBUG:='*mediasoup* *INFO* *WARN* *ERROR*'} INTERACTIVE=${INTERACTIVE:='true'} yarn start server.js
 
 FirstSetupLocally:
-	@cp server/config/config.yaml ./config/config.yaml
+	@cp server/config/config_local_docker.yaml server/config/config.yaml
+	docker compose up --build
 	@cd app && yarn install
 	@cd server && yarn install
 	@cd app && yarn build
 	@cd server && yarn build
 	@cd server && DEBUG=${DEBUG:='*mediasoup* *INFO* *WARN* *ERROR*'} INTERACTIVE=${INTERACTIVE:='true'} yarn start server.js
-#	make InstallNVM
-#	make InstallStunServerDocker
-#	make InstallRedisDocker
-#	make InstallRabbitMQManagementDocker
-	
+
 InstallNVM:
 	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 	nvm install 14
