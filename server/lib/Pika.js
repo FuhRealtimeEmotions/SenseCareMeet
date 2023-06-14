@@ -68,7 +68,7 @@ class Pika {
 async function connectQueue() {   
   try {
       logger.info("Connecting to RabbitMQ");
-      connection = await amqp.connect("amqp://guest:guest@rabbitmq:5672");
+      connection = await amqp.connect("amqp://guest:guest@192.168.178.56:5672");
       channel    = await connection.createChannel()
       var common_options = {durable: false, noAck: true, arguments: { "x-message-ttl":2000 }};
       channel.assertQueue('emotionrecognition', common_options);

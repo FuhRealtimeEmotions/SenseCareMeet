@@ -24,15 +24,15 @@ StartIBM:
 	@cd server && DEBUG=${DEBUG:='*mediasoup* *INFO* *WARN* *ERROR*'} INTERACTIVE=${INTERACTIVE:='true'} yarn start server.js
 
 StartLocally:
-#	@cp server/config/config_local.yaml server/config/config.yaml
-	docker compose up --build
+	@cp server/config/config_local_docker.yaml server/config/config.yaml
+#	docker compose up --build -d
 	@cd app && yarn build
 	@cd server && yarn build
 	@cd server && DEBUG=${DEBUG:='*mediasoup* *INFO* *WARN* *ERROR*'} INTERACTIVE=${INTERACTIVE:='true'} yarn start server.js
 
 FirstSetupLocally:
 	@cp server/config/config_local_docker.yaml server/config/config.yaml
-	docker compose up --build
+#	docker compose up --build
 	@cd app && yarn install
 	@cd server && yarn install
 	@cd app && yarn build

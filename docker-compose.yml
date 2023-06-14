@@ -2,24 +2,24 @@ version: '2.2'
 
 services:
 
-  edumeet:    
-    build: .
-    container_name: edumeet
-    restart: unless-stopped
-    user: "${CURRENT_USER}"
-    #volumes:
-    #- ${PWD}/..:/edumeet
-    #- ${PWD}/config/edumeet-server-config.js:/edumeet/server/config/config.js:ro
-    #- ${PWD}/config/edumeet-server-config.yaml:/edumeet/server/config/config.yaml:ro
-    #- ${PWD}/config/edumeet-app-config.js:/edumeet/app/public/config/config.js:ro
-    #- ${PWD}/../app/public/config/config.example.js:/edumeet/app/public/config/config.js:ro
-    #network_mode: "host"
-    ports:
-    - 8443:8443
-    - 8010:8010
-    depends_on:
-    - redis
-    - rabbitMQ
+  #edumeet:    
+  #  build: .
+  #  container_name: edumeet
+  #  restart: unless-stopped
+  #  user: "${CURRENT_USER}"
+  #  #volumes:
+  #  #- ${PWD}/..:/edumeet
+  #  #- ${PWD}/config/edumeet-server-config.js:/edumeet/server/config/config.js:ro
+  #  #- ${PWD}/config/edumeet-server-config.yaml:/edumeet/server/config/config.yaml:ro
+  #  #- ${PWD}/config/edumeet-app-config.js:/edumeet/app/public/config/config.js:ro
+  #  #- ${PWD}/../app/public/config/config.example.js:/edumeet/app/public/config/config.js:ro
+  #  #network_mode: "host"
+  #  ports:
+  #  - 8443:8443
+  #  - 8010:8010
+  #  depends_on:
+  #  - redis
+  #  - rabbitMQ
 
   redis:
     image: redis
@@ -41,10 +41,10 @@ services:
     ports:
     - 8093:8093
     environment:
-      - result_url=http://edumeet:8010
+      - result_url=http://192.168.178.56:8010
     depends_on:
-    - edumeet
-    - rabbitMQ
+    #- edumeet
+    #- rabbitMQ
 
   rabbitMQ:
     image: rabbitmq:3-management

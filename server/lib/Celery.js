@@ -4,10 +4,10 @@ const logger = new Logger("Celery");
 
 // const CELERY_BROKER_URL = config.rabbitmqOptions.url;
 //const CELERY_BROKER_URL = "amqp://user:mypass@10.243.64.9:31001";
-const CELERY_BROKER_URL = "amqp://user:mypass@rabbitmq:5672";
+const CELERY_BROKER_URL = "amqp://guest:guest@127.0.0.1:5672";
 //const CELERY_RESULT_BACKEND = "redis://10.243.64.9:30054/1";
 //const CELERY_RESULT_BACKEND = config.redisOptions.url;
-const CELERY_RESULT_BACKEND = "redis://redis:6379/0";
+const CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0";
 const celery = require("celery-node");
 class Celery {
   constructor(roomId) {

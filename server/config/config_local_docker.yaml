@@ -12,7 +12,7 @@ tls:
 
 backupTurnServers:
 - urls:
-  - "stun:192.168.39.127:3478"
+  - "stun:192.168.178.56:3478"
   username: "test"
   credential: "test123"
 
@@ -20,13 +20,13 @@ backupTurnServers:
 redisOptions:
   #host: "192.168.39.127"  
   host: "redis"                                                                                                                                                                
-  port: "30030"            
+  port: "6379"            
   password: "_REDIS_PASSWORD_"
   #url: "redis://192.168.39.127:30030/1"
-  url: "redis://redis:30030/1"
+  url: "redis://127.0.0.1:6379/1"
 
 rabbitmqOptions:
-  url: "amqp://guest:guest@192.168.39.127:32690"                                                                                                                                                                 
+  url: "amqp://guest:guest@127.0.0.1:32690"                                                                                                                                                                 
 
 
 prometheus:
@@ -39,11 +39,11 @@ mediasoup:
   webRtcTransport:
     listenIps:
     - ip: "0.0.0.0"
-      announcedIp: "127.0.0.1"
+      announcedIp: "192.168.178.56"
   plainRtpTransport:
     listenIp:
       ip: "0.0.0.0"
-      announcedIp: "127.0.0.1"
+      announcedIp: "192.168.178.56"
     rtcpMux: true
     comedia: false
 
@@ -52,6 +52,9 @@ bentoML:
   URI: "http://192.168.39.127:3000/predict_async"
 
 celery:
+  enabled: false
+
+pika:
   enabled: true
   
 emotion:
