@@ -3,6 +3,9 @@ kind: Pod
 metadata:
   name: redis
 spec:
+  setHostnameAsFQDN: true
+  hostname: redis
+  subdomain: edumeet
   containers:
   - name: redis
     image: redis:latest
@@ -15,19 +18,39 @@ kind: Pod
 metadata:
   name: edumeet
 spec:
+  setHostnameAsFQDN: true
+  hostname: server
+  subdomain: edumeet
   containers:
-  - name: edumeet
-    image: gtura/scmeet:v1.0
-    imagePullPolicy: IfNotPresent
-    ports:
-    - containerPort: 8443
-    - containerPort: 8010
+    - name: edumeet
+      image: gtura/scmeet:v1.0
+      imagePullPolicy: IfNotPresent
+      ports:
+      - containerPort: 8443
+      - containerPort: 8010
+      volumeMounts:
+      - name: config
+        mountPath: "/edumeet/server/dist/config"
+        readOnly: true
+  volumes:
+  - name: config
+    configMap:
+      name: edumeet-server-config.yaml
+      items:
+      - key: config.yaml
+        path: config.yaml
+#      - key: config.js
+#        path: config.js
+
 ---
 apiVersion: v1
 kind: Pod
 metadata:
   name: pikaworker
 spec:
+  setHostnameAsFQDN: true
+  hostname: pikaworker
+  subdomain: edumeet
   containers:
   - name: pikaworker
     image: dennismaier/pikaworker:latest
@@ -35,7 +58,7 @@ spec:
     - containerPort: 8093
     env:
       - name: rest_url
-        value: http://edumeet.svc.cluster.local:8010
+        value: http://edumeet:8010
 ---
 apiVersion: v1
 kind: Service
@@ -56,15 +79,61 @@ kind: ConfigMap
 metadata:  
   name: edumeet-server-config.yaml
 data:
-  config.yaml: "### MEINS\nlisteningPort: 8443\nlisteningHost: 0.0.0.0\n\nfileTracker:
-      \"wss://tracker.openwebtorrent.com\"\n\ntls:\n  cert: ./certs/edumeet-demo-cert.pem\n
-      \ key:  ./certs/edumeet-demo-key.pem\n\n# turnAPIURI: \"https://host.domain.tld/turn\"\n#
-      turnAPIKey: \"Your API key\"\n\nbackupTurnServers:\n- urls:\n  - \"stun:127.0.0.1:3478\"\n
-      \ username: \"test\"\n  credential: \"test123\"\n\nredisOptions:\n  host: \"192.168.178.20\"\n
-      \ port: \"6379\"\n  password: \"_REDIS_PASSWORD_\"\n  #url: \"redis://127.0.0.1:30030/1\"\n\nprometheus:\n
-      \ enabled: false\n  deidentify: true\n  numeric: true\n  listen: host.domain.tld\n\nmediasoup:\n
-      \ webRtcTransport:\n    listenIps:\n    - ip: \"0.0.0.0\"\n  plainRtpTransport:\n
-      \   listenIp:\n    - ip: \"0.0.0.0\"\n    rtcpMux: true\n    comedia: false\n\nrabbitmqOptions:\n
-      \ url: \"amqp://guest:guest@127.0.0.1:32690\"\n\nbentoML:\n  enabled: false\n
-      \ URI: \"http://127.0.0.1:3000/predict_async\"\n\npika:\n  enabled: true\n\ncelery:\n
-      \ enabled: false\n  \nemotion:\n  targetFps: 10\n  minFps: 5"
+  config.yaml: |-
+    ### MEINS
+    listeningPort: 8443
+    listeningHost: 0.0.0.0
+
+    fileTracker: "wss://tracker.openwebtorrent.com"
+
+    tls:
+      cert: ./certs/edumeet-demo-cert.pem
+      key:  ./certs/edumeet-demo-key.pem
+
+    # turnAPIURI: "https://host.domain.tld/turn"
+    # turnAPIKey: "Your API key"
+
+    backupTurnServers:
+    - urls:
+      - "stun:127.0.0.1:3478"
+      username: "test"
+      credential: "test123"
+
+    redisOptions:
+      host: "redis.edumeet.default.svc.cluster.local"
+      port: "6379"
+      password: "_REDIS_PASSWORD_"
+      #url: "redis://redis.edumeet.default.svc.cluster.local:30030/1"
+
+    prometheus:
+      enabled: false
+      deidentify: true
+      numeric: true
+      listen: host.domain.tld
+
+    mediasoup:
+      webRtcTransport:
+        listenIps:
+        - ip: "0.0.0.0"
+      plainRtpTransport:
+        listenIp:
+          ip: "0.0.0.0"
+        rtcpMux: true
+        comedia: false
+
+    rabbitmqOptions:
+      url: "amqp://guest:guest@127.0.0.1:32690"
+
+    bentoML:
+      enabled: false
+      URI: "http://127.0.0.1:3000/predict_async"
+
+    pika:
+      enabled: true
+
+    celery:
+      enabled: false
+      
+    emotion:
+      targetFps: 10
+      minFps: 5

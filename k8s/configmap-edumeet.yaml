@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:  
+  name: edumeet-server-config.yaml
+data:
+  config.yaml: |-
+    ### MEINS
+    listeningPort: 8443
+    listeningHost: 0.0.0.0
+
+    fileTracker: "wss://tracker.openwebtorrent.com"
+
+    tls:
+      cert: ./certs/edumeet-demo-cert.pem
+      key:  ./certs/edumeet-demo-key.pem
+
+    # turnAPIURI: "https://host.domain.tld/turn"
+    # turnAPIKey: "Your API key"
+
+    backupTurnServers:
+    - urls:
+      - "stun:127.0.0.1:3478"
+      username: "test"
+      credential: "test123"
+
+    redisOptions:
+      host: "redis"
+      port: "6379"
+      password: "_REDIS_PASSWORD_"
+      #url: "redis://redis:30030/1"
+
+    prometheus:
+      enabled: false
+      deidentify: true
+      numeric: true
+      listen: host.domain.tld
+
+    mediasoup:
+      webRtcTransport:
+        listenIps:
+        - ip: "0.0.0.0"
+      plainRtpTransport:
+        listenIp:
+          ip: "0.0.0.0"
+        rtcpMux: true
+        comedia: false
+
+    rabbitmqOptions:
+      url: "amqp://guest:guest@rabbitmq:32690"
+
+    bentoML:
+      enabled: false
+      URI: "http://127.0.0.1:3000/predict_async"
+
+    pika:
+      enabled: true
+
+    celery:
+      enabled: false
+      
+    emotion:
+      targetFps: 10
+      minFps: 5
