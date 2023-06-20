@@ -24,7 +24,7 @@ spec:
         - containerPort: 8093
         env:
           - name: rest_url
-            value: http://server.edumeet.default.svc.cluster.local:8010
+            value: http://edumeet:8010
 ---
 apiVersion: v1
 kind: Service

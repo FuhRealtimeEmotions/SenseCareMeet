@@ -10,4 +10,4 @@
 kubectl apply -f configmap-edumeet.yaml
 kubectl apply -f deployment-redis.yaml
 kubectl apply -f deployment-edumeet.yaml
-kubectl apply -f deployment-pika.yamljour
+kubectl apply -f deployment-pika.yaml
