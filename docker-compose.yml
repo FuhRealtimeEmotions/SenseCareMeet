@@ -41,8 +41,8 @@ services:
     ports:
     - 8093:8093
     environment:
-      - result_url=http://192.168.178.56:8010
-    depends_on:
+      - result_url=http://192.168.178.20:8010
+    #depends_on:
     #- edumeet
     #- rabbitMQ
 
@@ -69,6 +69,7 @@ services:
     image: coturn/coturn
     container_name: edumeet_coturn
     restart: unless-stopped
+    network_mode: host
     ports:
     - 3478:3478
     - 3478:3478/udp
@@ -84,7 +85,7 @@ services:
     - --no-tlsv1 
     - --no-tlsv1_1
     - --realm=my
-    - --listening-ip=0.0.0.0
+    - --listening-ip=127.0.0.1
     - --user=test:test123    
 
 #  nginx:

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#minikube start --driver=qemu2 --container-runtime=cri-o
+#minikube start --driver=kvm2 --network=default --container-runtime=cri-o
 #minikube ssh "sudo sysctl -w fs.inotify.max_user_watches=1048576"
 ###############
 #funzt nicht ##

@@ -14,9 +14,6 @@ spec:
       labels:
         app: pika
     spec:
-      setHostnameAsFQDN: true
-      hostname: pika
-      subdomain: edumeet
       containers:
       - name: pika
         image: dennismaier/pikaworker:latest

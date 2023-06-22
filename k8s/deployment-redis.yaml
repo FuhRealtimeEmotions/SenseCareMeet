@@ -14,9 +14,6 @@ spec:
       labels:
         app: redis
     spec:
-      setHostnameAsFQDN: true
-      hostname: redis
-      subdomain: edumeet
       containers:
       - name: redis
         image: redis:latest

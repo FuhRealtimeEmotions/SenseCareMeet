@@ -14,9 +14,6 @@ spec:
       labels:
         app: edumeet
     spec:
-      setHostnameAsFQDN: true
-      hostname: server
-      subdomain: edumeet
       containers:
         - name: edumeet
           image: gtura/scmeet:v1.0
@@ -41,7 +38,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: edumeet-test
+  name: edumeet
   labels:
     app: edumeet
 spec:
