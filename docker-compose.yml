@@ -41,8 +41,8 @@ services:
     ports:
     - 8093:8093
     environment:
-      - result_url=http://192.168.178.56:8010
-    depends_on:
+      - result_url=http://192.168.178.71:8010
+    #depends_on:
     #- edumeet
     #- rabbitMQ
 
