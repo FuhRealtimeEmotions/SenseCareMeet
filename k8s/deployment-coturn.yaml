@@ -53,13 +53,13 @@ spec:
         - containerPort: 49160
           protocol: UDP
         volumeMounts:
-          - name: cm-coturn
+          - name: config
             mountPath: /etc/turnserver.conf
 
       volumes:
-      - name: cm-coturn
+      - name: config
         configMap:
-          name: turnserver.conf
+          name: cm-coturn
           items:
           - key: turnserver.conf
             path: turnserver.conf
