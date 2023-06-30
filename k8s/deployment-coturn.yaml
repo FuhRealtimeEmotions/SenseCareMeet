@@ -28,8 +28,13 @@ spec:
               fieldPath: status.podIP
         args:
         - -v
-        - --external-ip="$(detect-external-ip)/$(MY_POD_IP)"
+        - --external-ip="$(detect-external-ip)/$(MY_POD_IP)" # Autodetect external IP
         - --realm="$(detect-external-ip)"
+        #- --external-ip="192.168.178/$(MY_POD_IP)"
+        #- --realm="$(detect-external-ip)"
+        - --cert=/tls/cert.pem
+        - --pkey=/tls/key.pem
+
         ports:
         - containerPort: 8093
         - containerPort: 3478
@@ -44,6 +49,7 @@ spec:
         - containerPort: 443 # evtl wieder raus
         - containerPort: 443 # evtl wieder raus
           protocol: UDP
+        - containerPort: 8000
         - containerPort: 5349
         - containerPort: 5349
           protocol: UDP
@@ -83,6 +89,10 @@ spec:
   - port: 3478
     name: turn2
     targetPort: 3478
+    protocol: TCP
+  - port: 8000
+    name: turn3
+    targetPort: 8000
     protocol: TCP
   selector:
     app: coturn

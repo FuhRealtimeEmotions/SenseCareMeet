@@ -46,7 +46,7 @@ data:
         comedia: false
 
     rabbitmqOptions:
-      url: "amqp://guest:guest@rabbitmq:32690"
+      url: "amqp://guest:guest@rabbitmq:5672"
 
     bentoML:
       enabled: false
@@ -54,6 +54,7 @@ data:
 
     pika:
       enabled: true
+      queueUrl: "amqp://guest:guest@rabbitmq:5672"
 
     celery:
       enabled: false
