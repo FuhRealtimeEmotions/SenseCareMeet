@@ -54,3 +54,13 @@ InstallRabbitMQManagementDocker:
 
 PrepareDocker:	
 	@docker compose build --no-cache
+
+prerequisites:
+	sudo apt install nodejs
+	sudo apt install npm
+	curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash 
+	source ~/.bashrc   
+	nvm install 14
+	npm install --global yarn
+
+	docker compose up --build
