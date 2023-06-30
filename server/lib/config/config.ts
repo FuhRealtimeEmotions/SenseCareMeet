@@ -296,6 +296,11 @@ const configSchema = convict({
 				format  : 'Boolean',
 				default : false
 			},
+			queueUrl : {
+				doc     : 'Queue Server URL.',
+				format  : String,
+				default : ''
+			}
 		},
 	// Emotion setting
 	emotion : 

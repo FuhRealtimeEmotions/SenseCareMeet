@@ -1,22 +1,19 @@
 const { config } = require("./config/config");
 import Logger from "./logger/Logger";
 const logger = new Logger("Pika");
-
-
-
-
-async function sendDataPika (data) {
-  await channel.sendToQueue("emotionrecognition", Buffer.from(data));
-}
-
 const amqp = require("amqplib");
-var channel, connection;  //global variables
+
+var connection, channel;
 
 class Pika {
+
   constructor(roomId) {
     this._roomId = roomId;
-    connectQueue();
+    connectToQueue();
   }
+
+  
+
 
   analyze(peer, { buffer, relativeBox }) {
     let b64_image = buffer.toString('base64');
@@ -65,16 +62,29 @@ class Pika {
 
 } 
 
-async function connectQueue() {   
+async function sendDataPika (data) {
   try {
-      logger.info("Connecting to RabbitMQ");
-      connection = await amqp.connect("amqp://guest:guest@192.168.178.56:5672");
-      channel    = await connection.createChannel()
+    if (!channel) {
+      logger.error("#### error: Channel undefined! ");
+      return;
+    }
+  
+    await channel.sendToQueue("emotionrecognition", Buffer.from(data));
+  } catch (error) {
+    logger.error("##### ERROR [sendDataPika]: ", error);
+  }
+}
+
+async function connectToQueue() {   
+  try {
+      logger.info("##########  Connecting to RabbitMQ");
+      connection = await amqp.connect(config.pika.queueUrl);
+      channel    = await connection.createChannel();
       var common_options = {durable: false, noAck: true, arguments: { "x-message-ttl":2000 }};
-      channel.assertQueue('emotionrecognition', common_options);
+      await channel.assertQueue('emotionrecognition', common_options);
       
   } catch (error) {
-      logger.log(error)
+      logger.error("##### ERROR [connectQueue]: ",error);
   }
 }
 

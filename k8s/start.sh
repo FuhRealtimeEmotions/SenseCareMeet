@@ -7,7 +7,11 @@
 ###############
 #minikube start --extra-config='kubelet.allowed-unsafe-sysctls="fs.inotify.*"'
 
-kubectl apply -f configmap-edumeet.yaml
-kubectl apply -f deployment-redis.yaml
-kubectl apply -f deployment-edumeet.yaml
-kubectl apply -f deployment-pika.yaml
+# openssl req -x509 -newkey rsa:4096 -keyout privkey.pem -out cert.pem -days 365 -nodes
+
+minikube kubectl -- apply -f configmap-edumeet.yaml
+minikube kubectl -- apply -f configmap-coturn.yaml
+minikube kubectl -- apply -f deployment-coturn.yaml
+minikube kubectl -- apply -f deployment-redis.yaml
+minikube kubectl -- apply -f deployment-edumeet.yaml
+minikube kubectl -- apply -f deployment-pikaworker.yaml

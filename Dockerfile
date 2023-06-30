@@ -14,6 +14,7 @@ FROM base as builder
 WORKDIR /edumeet
 COPY . .
 
+
 ENV DEBUG=edumeet*,mediasoup*
 
 RUN cd server && yarn && yarn build

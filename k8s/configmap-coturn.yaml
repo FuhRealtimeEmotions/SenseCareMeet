@@ -1,0 +1,110 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:  
+  name: cm-coturn
+data:
+  turnserver.conf: |-
+    listening-port=3478
+    tls-listening-port=5349
+    min-port=49152
+    max-port=49200
+    verbose
+    fingerprint
+    no-auth
+    # lt-cred-mech # use long-term credential mechanism
+    mobility
+    user=test:test123
+    syslog
+    web-admin
+    web-admin-ip=0.0.0.0
+    web-admin-port=8000
+    # realm=host.domain.tld
+    server-relay
+    
+  cert.pem: |-
+    -----BEGIN CERTIFICATE-----
+    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
+    -----END CERTIFICATE-----
+  key.pem: |-
+    -----BEGIN PRIVATE KEY-----
+    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
+    kcJCuNTF7QW68eM9EnuPg93f6fL/Lg==
+    -----END PRIVATE KEY-----
+

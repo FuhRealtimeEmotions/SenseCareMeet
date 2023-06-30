@@ -1,33 +1,23 @@
 version: '2.2'
 
-services:
+#networks:
+#  frontend:
+#    driver: bridge
+#    ipam:
+#      driver: default
+#      config:
+#      - subnet: 172.22.0.0/24
 
-  #edumeet:    
-  #  build: .
-  #  container_name: edumeet
-  #  restart: unless-stopped
-  #  user: "${CURRENT_USER}"
-  #  #volumes:
-  #  #- ${PWD}/..:/edumeet
-  #  #- ${PWD}/config/edumeet-server-config.js:/edumeet/server/config/config.js:ro
-  #  #- ${PWD}/config/edumeet-server-config.yaml:/edumeet/server/config/config.yaml:ro
-  #  #- ${PWD}/config/edumeet-app-config.js:/edumeet/app/public/config/config.js:ro
-  #  #- ${PWD}/../app/public/config/config.example.js:/edumeet/app/public/config/config.js:ro
-  #  #network_mode: "host"
-  #  ports:
-  #  - 8443:8443
-  #  - 8010:8010
-  #  depends_on:
-  #  - redis
-  #  - rabbitMQ
+services:
 
   redis:
     image: redis
     container_name: edumeet_redis
     restart: unless-stopped
-    #network_mode: "host"
     ports:
     - 6379:6379
+ #   networks:
+ #   - frontend
 
   pikaworker:
     image: dennismaier/pikaworker:latest
@@ -35,16 +25,16 @@ services:
     restart: unless-stopped
     mem_limit: 4096m
     mem_reservation: 4096m
-    #cpus: 1
     user: nobody
-    #network_mode: "host"
     ports:
     - 8093:8093
     environment:
-      - result_url=http://192.168.178.20:8010
-    #depends_on:
-    #- edumeet
-    #- rabbitMQ
+      - result_url=http://edumeet:8010
+  #  networks:
+  #    - frontend
+    depends_on:
+    - edumeet
+    - rabbitMQ
 
   rabbitMQ:
     image: rabbitmq:3-management
@@ -56,105 +46,79 @@ services:
     - 5672:5672
     - 5671:5671
     - 25672:25672
-    - 4369:4369
+    - 4369:4369    
     environment:
     - RABBITMQ_DEFAULT_USER=guest
     - RABBITMQ_DEFAULT_PASS=guest
+   # networks:
+   #   - frontend
 
-#    networks:
-#      edumeet:
-#        ipv4_address: 172.22.0.2
+  edumeet:    
+    build: .
+    container_name: edumeet
+    restart: unless-stopped
+    user: "${CURRENT_USER}"
+    volumes:
+    #- ${PWD}/..:/edumeet
+    #- ${PWD}/config/edumeet-server-config.js:/edumeet/server/config/config.js:ro
+    - ${PWD}/compose/config/edumeet-server-config.yaml:/edumeet/server/dist/config/config.yaml:ro
+    #- ${PWD}/config/edumeet-app-config.js:/edumeet/app/public/config/config.js:ro
+    #- ${PWD}/../app/public/config/config.example.js:/edumeet/app/public/config/config.js:ro
+    #network_mode: "host"
+    #networks:
+    #  - frontend
+    ports:
+    - 8443:8443
+    - 8010:8010
+    depends_on:
+    - redis
+    - rabbitMQ
+
 
   coturn:
     image: coturn/coturn
     container_name: edumeet_coturn
     restart: unless-stopped
     network_mode: host
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
     ports:
-    - 3478:3478
-    - 3478:3478/udp
-    - 5349:5349
-    - 5349:5349/udp
-    - 49160-49200:49160-49200/udp
+## STUN/TURN
+      - "3478:3478"
+      - "3478:3478/udp"
+      - "3479:3479"
+      - "3479:3479/udp"
+      - "80:80"
+      - "80:80/udp"
+## STUN/TURN SSL
+      - "5349:5349"
+      - "5349:5349/udp"
+      - "5350:5350"
+      - "5350:5350/udp"
+      - "443:443"
+      - "443:443/udp"
+      - 49160-49200:49160-49200/udp
+    #environment:
+    #- DETECT_EXTERNAL_IP=yes
     command:
+    - --network=host
     - --min-port=49160
     - --max-port=49200
     - --log-file=stdout
-    - --lt-cred-mech
+    #- --lt-cred-mech
+    - --no-auth
     - --verbose
-    - --no-tlsv1 
-    - --no-tlsv1_1
-    - --realm=my
-    - --listening-ip=127.0.0.1
-    - --user=test:test123    
-
-#  nginx:
-#    image: nginx
-#    container_name: edumeet_nginx
-#    restart: unless-stopped
-#    ports:
-#    - 8443:443
-#    volumes:
-#    - ${PWD}/../server/certs/edumeet-demo-cert.pem:/etc/nginx/cert.pem:ro
-#    - ${PWD}/../server/certs/edumeet-demo-key.pem:/etc/nginx/key.pem:ro
-#    - ${PWD}/config/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-#    extra_hosts:
-#      edumeet: 172.22.0.1
-#    depends_on:
-#    - edumeet
-
-#  prometheus:
-#    image: prom/prometheus:v2.26.0
-#    user: root
-#    container_name: edumeet_prometheus
-#    restart: unless-stopped
-#    volumes:
-#    - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
-#    - ./data/prometheus:/prometheus
-#    command:
-#    - '--config.file=/etc/prometheus/prometheus.yml'
-#    - '--storage.tsdb.path=/prometheus'
-#    ports:
-#    - 9090:9090
-#    links:
-#    #- cadvisor:cadvisor
-#    - node-exporter:node-exporter
-#    - edumeet:edumeet
-#    extra_hosts:
-#      edumeet: 172.22.0.1
-#
-#  node-exporter:
-#    image: prom/node-exporter:v1.1.2
-#    container_name: edumeet_node_exporter
-#    restart: unless-stopped
-#
-#  #cadvisor:
-#  #  image: google/cadvisor:latest
-#  #  container_name: edumeet_cadvisor
-#  #  restart: unless-stopped
-#  #  volumes:
-#  #  - /:/rootfs:ro
-#  #  - /var/run:/var/run:rw
-#  #  - /sys:/sys:ro
-#  #  - /var/lib/docker/:/var/lib/docker:ro
-#  #  expose:
-#  #  - 8080
-#
-#  grafana:
-#    image: grafana/grafana:7.5.3
-#    user: root
-#    container_name: edumeet_grafana
-#    restart: unless-stopped
-#    links:
-#    - prometheus:prometheus
-#    ports:
-#    - 9091:3000
-#    volumes:
-#    - ./config/grafana-prometheus-datasource.yml:/etc/grafana/provisioning/datasources/prometheus.yml
-#    - ./config/grafana-dashboards.yml:/etc/grafana/provisioning/dashboards/all.yml
-#    - ./config/grafana-dashboards:/var/lib/grafana/dashboards
-#    - ./data/grafana:/var/lib/grafana
-#    environment:
-#    - GF_SECURITY_ADMIN_USER=admin
-#    - GF_SECURITY_ADMIN_PASSWORD=admin
-#    - GF_USERS_ALLOW_SIGN_UP=false
+    - --fingerprint
+    - -X 192.168.178.35 
+    - --mobility
+    #- --allow-loopback-peers
+    #- --no-tlsv1
+    #- --no-tlsv1_1
+    #- --realm=edumeet
+    #- --listening-ip=0.0.0.0
+    - --user=test:test123
+    - --cert=/tls/cert.pem
+    - --pkey=/tls/pkey.pem
+    volumes:
+    - ${PWD}/server/certs/edumeet-demo-cert.pem:/tls/cert.pem:ro
+    - ${PWD}/server/certs/edumeet-demo-key.pem:/tls/pkey.pem:ro
