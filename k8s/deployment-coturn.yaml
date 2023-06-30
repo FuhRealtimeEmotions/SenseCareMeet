@@ -61,6 +61,8 @@ spec:
         volumeMounts:
           - name: config
             mountPath: /etc/turnserver.conf
+          - name: tls
+            mountPath: /tls
 
       volumes:
       - name: config
@@ -69,6 +71,10 @@ spec:
           items:
           - key: turnserver.conf
             path: turnserver.conf
+      - name: tls
+        configMap:
+          name: cm-coturn
+          items:
           - key: cert.pem
             path: cert.pem
           - key: key.pem
