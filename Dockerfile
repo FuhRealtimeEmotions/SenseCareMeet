@@ -1,39 +1,60 @@
-FROM node:14-buster-slim as base
+#build edumeet 
+FROM node:16-bullseye-slim AS edumeet-builder
+
 RUN apt-get update && \
-    apt-get install -y git build-essential python pkg-config libssl-dev python3-pip && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+    git \
+    bash \
+    jq \ 
+    build-essential \
+    python \
+    python3-pip \
+    openssl \
+    libssl-dev \
+    pkg-config && \
     apt-get clean
 
-RUN npm install -g nodemon && \
-    npm install -g concurrently
-RUN npm install -g typescript
+COPY app /edumeet/app
+COPY server /edumeet/server
 
-RUN touch /.yarnrc && mkdir -p /.yarn /.cache/yarn && chmod -R 775 /.yarn /.yarnrc /.cache
+#install app dep
+WORKDIR /edumeet/app
+RUN yarn && yarn build
+#RUN yarn install --production=false
 
-FROM base as builder
+#set and build app in producion mode/minified/.
+ENV NODE_ENV="production"
+ENV REACT_APP_DEBUG=""
+# RUN yarn run build
 
-WORKDIR /edumeet
-COPY . .
+#install server dep
+WORKDIR /edumeet/server
+RUN yarn && yarn build
+#RUN yarn install --production=false && yarn run build
 
+# create edumeet package 
+RUN ["/bin/bash", "-c", "cat <<< $(jq '.bundleDependencies += .dependencies' package.json) > package.json" ]
+RUN npm pack
 
-ENV DEBUG=edumeet*,mediasoup*
+# create edumeet image
+FROM node:16-bullseye-slim
 
-RUN cd server && yarn && yarn build
-RUN cd app && yarn && yarn build
+COPY --from=edumeet-builder /edumeet/server/edumeet-server*.tgz  /edumeet/server/
 
-#FROM node:14-buster-slim
-#
-#USER node
-#
-#WORKDIR /edumeet
-#
-#COPY --from=builder --chown=node /edumeet .
-#COPY --from=builder --chown=node /edumeet/server/dist ./dist
-#COPY --from=builder --chown=node /edumeet/server/dist/public ./public
-#COPY --from=builder --chown=node /edumeet/app/package.json .
-#
-#CMD [ "yarn", "start" ]
+WORKDIR /edumeet/server
 
+RUN tar xzf edumeet-server*.tgz && mv package/* ./ && rm -r package edumeet-server*.tgz
 
-CMD concurrently --names "server,app" \
-    "cd server && yarn start" \
-    "cd app && yarn start"
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -yq openssl && \
+    apt-get clean
+
+# Web PORTS
+EXPOSE 80 443 
+EXPOSE 40000-49999/udp
+
+## run server 
+ENV DEBUG ""
+
+#COPY docker-entrypoint.sh /
+ENTRYPOINT ["node", "/edumeet/server/dist/server.js"]
