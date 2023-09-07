@@ -23,8 +23,8 @@ RUN yarn && yarn build
 #RUN yarn install --production=false
 
 #set and build app in producion mode/minified/.
-ENV NODE_ENV="production"
-ENV REACT_APP_DEBUG=""
+# ENV NODE_ENV="production"
+# ENV REACT_APP_DEBUG=""
 # RUN yarn run build
 
 #install server dep
