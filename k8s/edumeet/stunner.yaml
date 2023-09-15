@@ -1,27 +1,25 @@
 apiVersion: gateway.networking.k8s.io/v1alpha2
 kind: GatewayClass
 metadata:
-  name: edumeet-gatewayclass
-  namespace: sensecaremeet
+  name: scmeet-gatewayclass
 spec:
   controllerName: "stunner.l7mp.io/gateway-operator"
   parametersRef:
     group: "stunner.l7mp.io"
     kind: GatewayConfig
-    name: edumeet-gatewayconfig
-    namespace: stunner
+    name: scmeet-gatewayconfig
+    namespace: scmeet
   description: "STUNner is a WebRTC ingress gateway for Kubernetes"
-
 ---
 apiVersion: stunner.l7mp.io/v1alpha1
 kind: GatewayConfig
 metadata:
-  name: edumeet-gatewayconfig
-  namespace: sensecaremeet
+  name: scmeet-gatewayconfig
+  namespace: scmeet
 spec:
   realm: stunner.l7mp.io
   authRef:
-    namespace: stunner
+    namespace: scmeet
     name: stunner-auth-secret
   minPort: 40000
   maxPort: 49999
@@ -38,14 +36,14 @@ spec:
 apiVersion: gateway.networking.k8s.io/v1alpha2
 kind: Gateway
 metadata:
-  name: udp-gateway
-  namespace: sensecaremeet
+  name: scmeet-udp-gateway
+  namespace: scmeet
   annotations:
     service.beta.kubernetes.io/do-loadbalancer-healthcheck-port: "8086"
     service.beta.kubernetes.io/do-loadbalancer-healthcheck-protocol: "http"
     service.beta.kubernetes.io/do-loadbalancer-healthcheck-path: "/live"
 spec:
-  gatewayClassName: edumeet-gatewayclass
+  gatewayClassName: scmeet-gatewayclass
   listeners:
     - name: udp-listener
       port: 3478
@@ -54,12 +52,12 @@ spec:
 apiVersion: gateway.networking.k8s.io/v1alpha2
 kind: UDPRoute
 metadata:
-  name: edumeet-media-plane
-  namespace: sensecaremeet
+  name: scmeet-media-plane
+  namespace: scmeet
 spec:
   parentRefs:
-    - name: udp-gateway
+    - name: scmeet-udp-gateway
   rules:
     - backendRefs:
         - name: edumeet
-          namespace: sensecaremeet
+          namespace: scmeet

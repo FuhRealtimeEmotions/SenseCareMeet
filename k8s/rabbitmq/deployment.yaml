@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: rabbitmq
-  namespace: sensecaremeet
+  namespace: scmeet
   labels:
     app: rabbitmq
 spec:

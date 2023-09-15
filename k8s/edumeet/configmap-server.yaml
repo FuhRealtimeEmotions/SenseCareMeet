@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:  
   name: edumeet-server-config
-  namespace: sensecaremeet
+  namespace: scmeet
 data:
   config.js: |
     const userRoles = require('../../lib/access/roles');

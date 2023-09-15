@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:  
   name: edumeet-app-config
-  namespace: sensecaremeet
+  namespace: scmeet
 data:
   config.js: |-
     /**

@@ -14,7 +14,7 @@ env:
   STUNNER_PASSWORD: ${{ secrets.STUNNER_PASSWORD }}
 
 jobs:
-  setup-build-publish-deploy:
+  deploy-to-k8s:
     runs-on: ubuntu-latest
     steps:
 

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: edumeet
-  namespace: sensecaremeet
+  namespace: scmeet
   labels:
     app: edumeet
 spec:

@@ -4,14 +4,14 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: stunner-config-watcher-serviceaccount
-  namespace: sensecaremeet
+  namespace: scmeet
 ---
 # Source: stunner/templates/stunner-configwatcher-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: stunner-config-watcher-role
-  namespace: sensecaremeet
+  namespace: scmeet
 rules:
 - apiGroups: [""]
   resources: ["configmaps", "secrets"]
@@ -22,7 +22,7 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: stunner-config-watcher-rolebind
-  namespace: sensecaremeet
+  namespace: scmeet
 roleRef:
   kind: Role
   name: stunner-config-watcher-role
@@ -30,4 +30,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: stunner-config-watcher-serviceaccount
-  namespace: sensecaremeet
+  namespace: scmeet

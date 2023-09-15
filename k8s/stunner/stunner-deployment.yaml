@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: stunner
-  namespace: sensecaremeet
+  namespace: scmeet
   annotations: 
     app: stunner
     helm.sh/chart: stunner-0.15.0
