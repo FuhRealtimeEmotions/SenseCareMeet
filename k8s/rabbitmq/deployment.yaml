@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: rabbitmq
+  namespace: sensecaremeet
   labels:
     app: rabbitmq
 spec:
@@ -29,28 +30,3 @@ spec:
             value: guest
           - name: RABBITMQ_DEFAULT_PASS
             value: guest
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: rabbitmq
-  labels:
-    app: rabbitmq
-spec:
-  ports:
-  - port: 8093
-    targetPort: 8093
-  - port: 15672
-    targetPort: 15672
-  - port: 32690
-    targetPort: 32690
-  - port: 5672
-    targetPort: 5672 
-  - port: 5671
-    targetPort: 5671
-  - port: 25672
-    targetPort: 25672
-  - port: 4369
-    targetPort: 4369
-  selector:
-    app: rabbitmq

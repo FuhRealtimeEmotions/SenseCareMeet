@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sensecaremeet
+  namespace: sensecaremeet
+  labels:
+    app: edumeet
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: public-iks-k8s-nginx
+  rules:
+  - host: scmeet.de
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: edumeet
+            port: 
+              number: 8080
+  tls:
+  - hosts:
+      - scmeet.de
+    secretName: scmeet-cert
