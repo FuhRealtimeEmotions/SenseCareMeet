@@ -1,5 +1,7 @@
 #!/bin/bash
 
+K8S_NAMESPACE=scmeet
+
 deployment_order=(
     namespace.yaml
     stunner-auth-secret.yaml
@@ -10,8 +12,11 @@ deployment_order=(
     pikaworker/
 )
 
+# Create namespace
+kubectl create namespace $K8S_NAMESPACE --dry-run=client -o yaml > namespace.yaml
+
 # Create secret with STUNner credentials to limit its access
-kubectl -n sensecaremeet create secret generic stunner-auth-secret \
+kubectl -n $K8S_NAMESPACE create secret generic stunner-auth-secret \
     --from-literal=type=static \
     --from-literal=username=${STUNNER_USER} \
     --from-literal=password=${STUNNER_PASSWORD} \
