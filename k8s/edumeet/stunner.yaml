@@ -28,20 +28,13 @@ spec:
     external-dns.alpha.kubernetes.io/ibmcloud-proxied: "false"
     service.kubernetes.io/ibm-load-balancer-cloud-provider-enable-features: "nlb"
     service.kubernetes.io/ibm-load-balancer-cloud-provider-vpc-lb-name: "stunner-loadbalancer"
-    service.kubernetes.io/ibm-load-balancer-cloud-provider-vpc-health-check-udp: "32627"
-    service.kubernetes.io/ibm-load-balancer-cloud-provider-vpc-health-check-port: "32627"
-    service.kubernetes.io/ibm-load-balancer-cloud-provider-vpc-health-check-protocol: "http"
-    service.kubernetes.io/ibm-load-balancer-cloud-provider-vpc-health-check-path: "/live"
+    service.kubernetes.io/ibm-load-balancer-cloud-provider-vpc-health-check-udp: "10250" # H4CK: we use the kubelet port for healthchecks hence UDP backend pool appears healthy and traffic is forwarded
 ---
 apiVersion: gateway.networking.k8s.io/v1alpha2
 kind: Gateway
 metadata:
   name: scmeet-udp-gateway
   namespace: scmeet
-  annotations:
-    service.beta.kubernetes.io/do-loadbalancer-healthcheck-port: "8086"
-    service.beta.kubernetes.io/do-loadbalancer-healthcheck-protocol: "http"
-    service.beta.kubernetes.io/do-loadbalancer-healthcheck-path: "/live"
 spec:
   gatewayClassName: scmeet-gatewayclass
   listeners:
