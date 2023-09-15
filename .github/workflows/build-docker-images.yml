@@ -1,6 +1,11 @@
 name: Create and publish a Docker image
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'server/**'
+      - 'app/**'
+      - 'Dockerfile'
 
 env:
   REGISTRY: ghcr.io

@@ -1,6 +1,8 @@
 name: Deploy to IBM Kubernetes Service
 
-on: [workflow_dispatch]
+on:
+  push:
+  workflow_dispatch:
 
 # Environment variables available to all jobs and steps in this workflow
 env:
@@ -8,10 +10,11 @@ env:
   IBM_RESOURCE_GROUP: ${{ secrets.IBM_RESOURCE_GROUP }}
   IBM_K8S_API_KEY: ${{ secrets.IBM_K8S_API_KEY }}
   IBM_K8S_CLUSTER: ${{ secrets.IBM_K8S_CLUSTER }}
+  STUNNER_USER: ${{ secrets.STUNNER_USER }}
+  STUNNER_PASSWORD: ${{ secrets.STUNNER_PASSWORD }}
 
 jobs:
   setup-build-publish-deploy:
-    name: Setup and Deploy
     runs-on: ubuntu-latest
     steps:
 
@@ -36,5 +39,6 @@ jobs:
     # Deploy the Docker image to the IKS cluster
     - name: Deploy to IKS
       run: |
-        k8s/deploy.sh
+        cd k8s
+        ./deploy.sh
         
