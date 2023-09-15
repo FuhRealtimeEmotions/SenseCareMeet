@@ -1,0 +1,40 @@
+name: Deploy to IBM Kubernetes Service
+
+on: [workflow_dispatch]
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  IBM_CLOUD_REGION: eu-de
+  IBM_RESOURCE_GROUP: ${{ secrets.IBM_RESOURCE_GROUP }}
+  IBM_K8S_API_KEY: ${{ secrets.IBM_K8S_API_KEY }}
+  IBM_K8S_CLUSTER: ${{ secrets.IBM_K8S_CLUSTER }}
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup and Deploy
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Download and Install IBM Cloud CLI
+    - name: Install IBM Cloud CLI
+      run: |
+        curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
+        ibmcloud --version
+        ibmcloud config --check-version=false
+        ibmcloud plugin install -f kubernetes-service
+
+    # Authenticate with IBM Cloud CLI
+    - name: Authenticate with IBM Cloud CLI
+      run: |
+        ibmcloud login --apikey "${IBM_K8S_API_KEY}" -r "${IBM_CLOUD_REGION}" -g "${IBM_RESOURCE_GROUP}"
+        ibmcloud ks cluster config --cluster $IBM_K8S_CLUSTER
+        kubectl config current-context
+
+    # Deploy the Docker image to the IKS cluster
+    - name: Deploy to IKS
+      run: |
+        k8s/deploy.sh
+        
