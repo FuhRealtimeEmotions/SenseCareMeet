@@ -82,9 +82,12 @@ data:
     };
 
   config.yaml: |-
-    listeningPort: 8080
+    listeningPort: 8443
     listeningHost: 0.0.0.0
-    httpOnly: true
+
+    tls:
+      cert: ./certs/edumeet-demo-cert.pem
+      key:  ./certs/edumeet-demo-key.pem
 
     fileTracker: "wss://tracker.openwebtorrent.com"
 

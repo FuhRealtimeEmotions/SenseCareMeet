@@ -7,8 +7,8 @@ metadata:
     app: edumeet
 spec:
   ports:  
-  - port: 8080
-    name: web-http
+  - port: 8443
+    name: web-https
   - port: 8010
     name: api
   selector:

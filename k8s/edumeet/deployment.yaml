@@ -20,20 +20,14 @@ spec:
           image: ghcr.io/fuhrealtimeemotions/sensecaremeet:feat-automate-build-and-deployment
           imagePullPolicy: IfNotPresent
           ports:
-          - containerPort: 8080
-            name: web-http
+          - containerPort: 8443
+            name: web-https
           - containerPort: 8010
             name: api
-          # env:
-          # - name: STUNNER_USER
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: stunner-auth-secret
-          #       key: username
           volumeMounts:
           - name: server-config
             mountPath: /edumeet/server/dist/config
-            readOnly: false
+            readOnly: true
           - name: app-config
             mountPath: /edumeet/server/dist/public/config
             readOnly: true

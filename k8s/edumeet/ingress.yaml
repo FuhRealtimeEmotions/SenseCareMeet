@@ -7,6 +7,7 @@ metadata:
     app: edumeet
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   ingressClassName: public-iks-k8s-nginx
   rules:
@@ -19,7 +20,7 @@ spec:
           service:
             name: edumeet
             port: 
-              number: 8080
+              number: 8443
   tls:
   - hosts:
       - scmeet.de
