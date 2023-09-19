@@ -1,0 +1,17 @@
+---
+# Source: stunner/templates/stunner-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: stunner
+  namespace: scmeet
+  labels:
+    app: stunner
+spec:
+  selector:
+    app: stunner
+  ports:
+    - port: 3478
+      protocol: UDP
+      name: stunner
+  type: ClusterIP

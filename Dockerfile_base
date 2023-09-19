@@ -1,8 +1,0 @@
-FROM node:14-buster-slim as edumeetbase
-RUN apt-get update && \
-    apt-get install -y git build-essential python pkg-config libssl-dev python3-pip && \
-    apt-get clean
-
-RUN npm install -g nodemon && \
-    npm install -g concurrently
-RUN touch /.yarnrc && mkdir -p /.yarn /.cache/yarn && chmod -R 775 /.yarn /.yarnrc /.cache

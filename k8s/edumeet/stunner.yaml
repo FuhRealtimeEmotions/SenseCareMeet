@@ -1,0 +1,56 @@
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: GatewayClass
+metadata:
+  name: scmeet-gatewayclass
+spec:
+  controllerName: "stunner.l7mp.io/gateway-operator"
+  parametersRef:
+    group: "stunner.l7mp.io"
+    kind: GatewayConfig
+    name: scmeet-gatewayconfig
+    namespace: scmeet
+  description: "STUNner is a WebRTC ingress gateway for Kubernetes"
+---
+apiVersion: stunner.l7mp.io/v1alpha1
+kind: GatewayConfig
+metadata:
+  name: scmeet-gatewayconfig
+  namespace: scmeet
+spec:
+  realm: stunner.l7mp.io
+  authRef:
+    namespace: scmeet
+    name: stunner-auth-secret
+  minPort: 40000
+  maxPort: 49999
+  loadBalancerServiceAnnotations:
+    external-dns.alpha.kubernetes.io/hostname: stunner.scmeet.de
+    external-dns.alpha.kubernetes.io/ibmcloud-proxied: "false"
+    service.kubernetes.io/ibm-load-balancer-cloud-provider-enable-features: "nlb"
+    service.kubernetes.io/ibm-load-balancer-cloud-provider-vpc-lb-name: "stunner-loadbalancer"
+    service.kubernetes.io/ibm-load-balancer-cloud-provider-vpc-health-check-udp: "10250" # H4CK: we use the kubelet port for healthchecks hence UDP backend pool appears healthy and traffic is forwarded
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: Gateway
+metadata:
+  name: scmeet-udp-gateway
+  namespace: scmeet
+spec:
+  gatewayClassName: scmeet-gatewayclass
+  listeners:
+    - name: udp-listener
+      port: 3478
+      protocol: UDP
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: UDPRoute
+metadata:
+  name: scmeet-media-plane
+  namespace: scmeet
+spec:
+  parentRefs:
+    - name: scmeet-udp-gateway
+  rules:
+    - backendRefs:
+        - name: edumeet
+          namespace: scmeet

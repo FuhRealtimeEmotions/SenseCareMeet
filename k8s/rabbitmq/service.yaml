@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  namespace: scmeet
+  labels:
+    app: rabbitmq
+spec:
+  ports:
+  - port: 8093
+    name: port1
+    targetPort: 8093
+  - port: 15672
+    name: port2
+    targetPort: 15672
+  - port: 32690
+    name: port3
+    targetPort: 32690
+  - port: 5672
+    name: port4
+    targetPort: 5672 
+  - port: 5671
+    name: port5
+    targetPort: 5671
+  - port: 25672
+    name: port6
+    targetPort: 25672
+  - port: 4369
+    name: port7
+    targetPort: 4369
+  selector:
+    app: rabbitmq
